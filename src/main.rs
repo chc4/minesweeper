@@ -25,13 +25,14 @@ fn read_input<T>(message: &'static str) -> Result<T,Box<Error>>
     where T: std::str::FromStr,
           <T as std::str::FromStr>::Err: std::fmt::Debug
 {
+    // all of this is really nasty - i'd use an actual library for input
     let mut stdout = std::io::stdout();
     let mut stdin = std::io::stdin();
     stdout.write(message.to_string().as_bytes())?;
     stdout.flush()?;
     let mut buff = String::new();
     stdin.lock().read_line(&mut buff)?;
-    Ok(buff.trim().parse::<T>().unwrap())
+    Ok(buff.trim().parse::<T>().expect("Couldn't parse your input!"))
 }
 
 struct Game {
@@ -179,7 +180,6 @@ impl Game {
 }
 
 fn main() -> Result<(),Box<std::error::Error>> {
-    // all of this is really nasty - i'd use an actual library for input
     let stdin = std::io::stdin();
 
     let width: usize = read_input("Enter board width: ")?;
